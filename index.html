@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ledger — Personal Expense Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-mark">§</span>
+      <div>
+        <h1>Personal Expense Tracker</h1>
+        <p class="brand-sub">a running account of where it goes</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="exportBtn" class="btn btn-ghost">Export CSV</button>
+      <button id="clearBtn" class="btn btn-ghost btn-danger">Clear all</button>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <!-- LEFT: entry form + receipt tape (signature element) -->
+    <section class="col col-tape">
+
+      <form id="entryForm" class="entry-form" autocomplete="off">
+        <h2 class="form-title">New entry</h2>
+
+        <div class="field-row">
+          <button type="button" class="type-toggle" data-type="expense" id="typeToggle">
+            <span class="toggle-pill" id="togglePill"></span>
+            <span class="toggle-label expense-label">Expense</span>
+            <span class="toggle-label income-label">Income</span>
+          </button>
+        </div>
+
+        <div class="field">
+          <label for="desc">Description</label>
+          <input type="text" id="desc" placeholder="Coffee, freelance payment, rent…" required maxlength="40">
+        </div>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="amount">Amount</label>
+            <input type="number" id="amount" placeholder="0" min="0" step="1" required>
+          </div>
+          <div class="field">
+            <label for="category">Category</label>
+            <select id="category">
+              <option>Food</option>
+              <option>Transport</option>
+              <option>Housing</option>
+              <option>Utilities</option>
+              <option>Entertainment</option>
+              <option>Health</option>
+              <option>Income</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="date">Date</label>
+          <input type="date" id="date" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">Add to ledger</button>
+      </form>
+
+      <!-- Receipt tape -->
+      <div class="tape-wrap">
+        <div class="tape-perforation top"></div>
+        <div class="tape" id="tape">
+          <div class="tape-head">
+            <span>LEDGER RECEIPT</span>
+            <span id="tapeDate"></span>
+          </div>
+          <div class="tape-rule"></div>
+          <div id="tapeBody" class="tape-body">
+            <!-- entries injected here -->
+          </div>
+          <div class="tape-rule"></div>
+          <div class="tape-total" id="tapeTotal">
+            <span>BALANCE</span>
+            <span id="tapeTotalValue">$0.00</span>
+          </div>
+        </div>
+        <div class="tape-perforation bottom"></div>
+      </div>
+
+    </section>
+
+    <!-- RIGHT: summary + charts -->
+    <section class="col col-summary">
+
+      <div class="summary-cards">
+        <div class="card card-balance">
+          <span class="card-label">Balance</span>
+          <span class="card-value" id="balanceValue">$0.00</span>
+          <span class="card-note" id="balanceNote">start logging to see your standing</span>
+        </div>
+        <div class="card card-in">
+          <span class="card-label">Income</span>
+          <span class="card-value" id="incomeValue">$0.00</span>
+        </div>
+        <div class="card card-out">
+          <span class="card-label">Spent</span>
+          <span class="card-value" id="expenseValue">$0.00</span>
+        </div>
+      </div>
+
+      <div class="chart-panels">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Where it goes</h3>
+            <span class="panel-sub">by category</span>
+          </div>
+          <div class="chart-box">
+            <canvas id="categoryChart"></canvas>
+          </div>
+          <p class="empty-note" id="categoryEmpty">No expenses logged yet.</p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Last 6 months</h3>
+            <span class="panel-sub">income vs. spend</span>
+          </div>
+          <div class="chart-box">
+            <canvas id="trendChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <label for="filterCategory">Filter tape:</label>
+        <select id="filterCategory">
+          <option value="all">All categories</option>
+        </select>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <span>Entries save to your browser's local storage — nothing leaves this page.</span>
+  </footer>
+
+</div>
+
+<<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
